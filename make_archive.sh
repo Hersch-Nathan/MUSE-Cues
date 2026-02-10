@@ -3,7 +3,8 @@ set -u
 
 # Files to include in the zip. Edit this list as needed.
 FILES=(
-  "RUR.qlab5"
+  "Assembled.qlab5"
+  "Assembled.esf3d"
 )
 
 ARCHIVE_DIR="Archive"
