@@ -1,10 +1,28 @@
 # MUSE-Cues
 Cues for MUSE.
 
+## Notes
+Qlab/EOS
+UDP, localhost, 8000
+
 ## Archive script
 Run `./make_archive.sh` to zip the listed files into Archive/ using a timestamped name.
 
+## Lighting cues import script
+
+
 ## Change log
+### 2026-02-11
+Updated *cue.csv file generator:
+- changed lighting_cues to eoslightingcues.csv
+- added palettes used in each cue in eoslightingcues.csv
+- created qlablightingcues.csv to map qlab q to eos q
+
+Qlab: 
+- configured sound patch
+- confirmed it works on show computer
+
+
 ### 2026-02-10
 Qlab:
 - Added network connection for EOS on the same device.
@@ -14,6 +32,3 @@ EOS:
 - Patched fixtures.
 - Created all color and intensity palettes.
 
-## Notes
-Qlab/EOS
-UDP, localhost, 8000

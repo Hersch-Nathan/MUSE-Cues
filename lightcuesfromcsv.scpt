@@ -1,67 +1,77 @@
--- Creates QLab Network cues from lightingcues.csv in this folder.
+-- imports the qlablightingcue csv file in that format into qlab
+-- for each q number in the file will be inported as a network que. if there is a x.x number then it will be created as a group
 
-set scriptPath to (path to me)
-set scriptFolder to (container of scriptPath) as alias
-set csvFile to (scriptFolder as text) & "lightingcues.csv"
+-- configs
+set myfile to qlablightingcue.csv
+set myCuelistName to "Lighting Imported"
 
-set csvText to read file csvFile
-set oldDelims to AppleScript's text item delimiters
-set AppleScript's text item delimiters to linefeed
-set csvLines to text items of csvText
-set AppleScript's text item delimiters to oldDelims
+-- read file
+set myArray to every paragraph of (read file myfile)
+set AppleScript's text item delimiters to sep
 
-if (count of csvLines) is 0 then return
+-- tell qlab
+tell application id "com.figure53.QLab.5" to tell front workspace
+	set current cue list to myCuelistName
+	set results to {}
+	set group to {}
+	repeat with myline1 in myArray
 
--- Skip header row.
-set startIndex to 2
+		------- kludge to remove nulls from string split the line on nulls to remove them
+		set AppleScript's text item delimiters to AppleScript's character id (0)
+		set tempArr to (every text item of myline1)
+		-- then rejoin the string without them
+		set AppleScript's text item delimiters to ""
+		set myline to tempArr as text
+		---------------- end of kludge ------------
 
--- Helper to trim whitespace.
-on trimText(t)
-	set whiteSpace to {space, tab, return, linefeed}
-	set oldDelims to AppleScript's text item delimiters
-	set AppleScript's text item delimiters to whiteSpace
-	set itemsList to text items of t
-	set AppleScript's text item delimiters to ""
-	set t to itemsList as text
-	set AppleScript's text item delimiters to oldDelims
-	return t
-end trimText
+		-- split the line into an array on the comma separator
+		set AppleScript's text item delimiters to sep
+		set myitems to every text item of myline
+		set AppleScript's text item delimiters to linefeed
 
-repeat with i from startIndex to (count of csvLines)
-	set lineText to item i of csvLines
-	if lineText is "" then
-		-- Skip blank lines.
-		continue repeat
-	end if
+		-- load the current value
+		set qlabq to (item 1 of myitems) as number
+		set qlabname to (item 2 of myitems) as text
+		set eosq to (item 3 of myitems) as text
+		set eosname to (item 4 of myitems) as text
 
-	set oldDelims to AppleScript's text item delimiters
-	set AppleScript's text item delimiters to ","
-	set cols to text items of lineText
-	set AppleScript's text item delimiters to oldDelims
+		if qlabqText does not contain "." then
+			make type "Network" 
+			set networkCue to last item of (selected as list)
+			set q number of networkCue to qlabq
+			set q name of networkCue to qlabname
+			set network patch number of networkCue to 2
+			set parameter values of networkCue to {"cue", "no", "fire", eosq} 
 
-	if (count of cols) < 2 then
-		-- Not enough columns to read Q and Name.
-		continue repeat
-	end if
-
-	set cueQ to my trimText(item 1 of cols)
-	set cueName to my trimText(item 2 of cols)
-
-	if cueQ is "" then
-		-- Skip rows without a cue number.
-		continue repeat
-	end if
-
-	set fullName to cueQ
-	if cueName is not "" then
-		set fullName to cueQ & " " & cueName
-	end if
-
-	tell application id "com.figure53.QLab.5" to tell front workspace
-		make type "Network"
-		set networkCue to last item of (selected as list)	
-		set q name of networkCue to fullName
-		set network patch number of networkCue to 2
-		set custom message of networkCue to "/eos/cue/" & cueQ & "/fire/"
-	end tell
-end repeat
+		else
+			-- has decimal, extract digit before decimal
+			set AppleScript's text item delimiters to "."
+			set digitBeforeDec to text item 1 of qlabqText
+			set AppleScript's text item delimiters to linefeed
+			
+			if digitBeforeDec = group then
+				make type "Network" 
+				set networkCue to last item of (selected as list)
+				set q number of networkCue to qlabq
+				set q name of networkCue to qlabname
+				set network patch number of networkCue to 2
+				set parameter values of networkCue to {"cue", "no", "fire", eosq} 
+				move networkCue to end of GroupCue
+			else
+				set group to digitBeforeDec
+				-- create group
+				make type "group"
+				set GroupCue to last item of (selected as list)
+				set group to digitBeforeDec
+				-- create cue
+				make type "Network" 
+				set networkCue to last item of (selected as list)
+				set q number of networkCue to qlabq
+				set q name of networkCue to qlabname
+				set network patch number of networkCue to 2
+				set parameter values of networkCue to {"cue", "no", "fire", eosq} 
+				move networkCue to end of GroupCue
+			end if
+		end if
+	end repeat
+end tell

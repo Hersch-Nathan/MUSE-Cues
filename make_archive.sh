@@ -7,6 +7,9 @@ FILES=(
   "Assembled.esf3d"
   "Lines"
   "SFX"
+  "eoslightingcues.csv"
+  "qlablightingcues.csv"
+
 )
 
 ARCHIVE_DIR="Archive"
