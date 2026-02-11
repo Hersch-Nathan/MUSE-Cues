@@ -5,6 +5,8 @@ set -u
 FILES=(
   "Assembled.qlab5"
   "Assembled.esf3d"
+  "Lines"
+  "SFX"
 )
 
 ARCHIVE_DIR="Archive"
@@ -38,6 +40,6 @@ fi
 zip_name="archive_$(date +"%Y%m%d_%H%M%S").zip"
 zip_path="$ARCHIVE_DIR/$zip_name"
 
-zip -r "$zip_path" "${existing_files[@]}"
+zip -r "$zip_path" "${existing_files[@]}" -x "**/.DS_Store"
 
 echo "Created $zip_path"
