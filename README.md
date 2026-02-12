@@ -15,6 +15,7 @@ Run the script using the apple interperator
 ### 2026-02-12
 Qlab:
 - build midi ques for animatronic
+- build main que stack and built 4 ques for sm
 
 
 ### 2026-02-11
