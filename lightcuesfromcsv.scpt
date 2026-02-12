@@ -2,76 +2,73 @@
 -- for each q number in the file will be inported as a network que. if there is a x.x number then it will be created as a group
 
 -- configs
-set myfile to qlablightingcue.csv
+set scriptPath to (path to me)
+set scriptFolder to (container of scriptPath) as alias
+set csvFilePath to (scriptFolder as text) & "qlablightingcue.csv"
 set myCuelistName to "Lighting Imported"
+set csvSeparator to ","
 
 -- read file
-set myArray to every paragraph of (read file myfile)
-set AppleScript's text item delimiters to sep
+set csvLines to every paragraph of (read file csvFilePath)
 
 -- tell qlab
 tell application id "com.figure53.QLab.5" to tell front workspace
 	set current cue list to myCuelistName
-	set results to {}
-	set group to {}
-	repeat with myline1 in myArray
+	set currentGroup to missing value
+	set lineIndex to 0
+	repeat with currentLineRaw in csvLines
+		set lineIndex to lineIndex + 1
+		if lineIndex is 1 then
+			continue repeat
+		end if
 
-		------- kludge to remove nulls from string split the line on nulls to remove them
-		set AppleScript's text item delimiters to AppleScript's character id (0)
-		set tempArr to (every text item of myline1)
-		-- then rejoin the string without them
-		set AppleScript's text item delimiters to ""
-		set myline to tempArr as text
-		---------------- end of kludge ------------
+		-- Note: null removal commented out for clean input
+		-- set AppleScript's text item delimiters to AppleScript's character id (0)
+		-- set tempArr to (every text item of currentLineRaw)
+		-- set AppleScript's text item delimiters to ""
+		-- set currentLine to tempArr as text
+		set currentLine to currentLineRaw
 
 		-- split the line into an array on the comma separator
-		set AppleScript's text item delimiters to sep
-		set myitems to every text item of myline
+		set AppleScript's text item delimiters to csvSeparator
+		set csvFields to every text item of currentLine
 		set AppleScript's text item delimiters to linefeed
 
-		-- load the current value
-		set qlabq to (item 1 of myitems) as number
-		set qlabname to (item 2 of myitems) as text
-		set eosq to (item 3 of myitems) as text
-		set eosname to (item 4 of myitems) as text
+		-- load the current values
+		set qlabQText to (item 1 of csvFields) as text
+		set qlabName to (item 2 of csvFields) as text
+		set eosQText to (item 3 of csvFields) as text
+		set eosName to (item 4 of csvFields) as text
 
-		if qlabqText does not contain "." then
-			make type "Network" 
-			set networkCue to last item of (selected as list)
-			set q number of networkCue to qlabq
-			set q name of networkCue to qlabname
-			set network patch number of networkCue to 2
-			set parameter values of networkCue to {"cue", "no", "fire", eosq} 
-
-		else
-			-- has decimal, extract digit before decimal
+		-- Determine if this is a new group (has decimal point)
+		set hasDecimal to (qlabQText contains ".")
+		set digitBeforeDecimal to missing value
+		
+		if hasDecimal then
 			set AppleScript's text item delimiters to "."
-			set digitBeforeDec to text item 1 of qlabqText
+			set digitBeforeDecimal to text item 1 of qlabQText
 			set AppleScript's text item delimiters to linefeed
 			
-			if digitBeforeDec = group then
-				make type "Network" 
-				set networkCue to last item of (selected as list)
-				set q number of networkCue to qlabq
-				set q name of networkCue to qlabname
-				set network patch number of networkCue to 2
-				set parameter values of networkCue to {"cue", "no", "fire", eosq} 
-				move networkCue to end of GroupCue
-			else
-				set group to digitBeforeDec
-				-- create group
+			-- Check if we need a new group
+			if currentGroup is missing value or digitBeforeDecimal is not equal to currentGroup then
 				make type "group"
-				set GroupCue to last item of (selected as list)
-				set group to digitBeforeDec
-				-- create cue
-				make type "Network" 
-				set networkCue to last item of (selected as list)
-				set q number of networkCue to qlabq
-				set q name of networkCue to qlabname
-				set network patch number of networkCue to 2
-				set parameter values of networkCue to {"cue", "no", "fire", eosq} 
-				move networkCue to end of GroupCue
+				set currentGroup to (last item of (selected as list))
+				set q name of currentGroup to "Group " & digitBeforeDecimal
 			end if
+		end if
+		
+		-- Create the Network cue
+		make type "Network"
+		set networkCue to last item of (selected as list)
+		set qlabQNumber to (qlabQText as number)
+		set q number of networkCue to qlabQNumber
+		set q name of networkCue to qlabName
+		set network patch number of networkCue to 2
+		set parameter values of networkCue to {"cue", "no", "fire", eosQText} 
+		
+		-- Move to group if needed
+		if hasDecimal and currentGroup is not missing value then
+			set parent of networkCue to currentGroup
 		end if
 	end repeat
 end tell
