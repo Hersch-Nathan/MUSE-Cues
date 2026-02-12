@@ -8,7 +8,7 @@ FILES=(
   "Lines"
   "SFX"
   "eoslightingcues.csv"
-  "qlablightingcues.csv"
+  "qlablightingcue.csv"
   "requirements.txt"
 )
 
