@@ -9,10 +9,17 @@ FILES=(
   "SFX"
   "eoslightingcues.csv"
   "qlablightingcues.csv"
-
+  "requirements.txt"
 )
 
 ARCHIVE_DIR="Archive"
+
+# Generate requirements.txt if .venv exists
+if [[ -d ".venv" ]]; then
+  source .venv/bin/activate
+  pip freeze > requirements.txt
+  deactivate
+fi
 
 if [[ ! -d "$ARCHIVE_DIR" ]]; then
   mkdir -p "$ARCHIVE_DIR"
