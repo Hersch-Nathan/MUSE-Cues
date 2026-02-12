@@ -9,9 +9,14 @@ UDP, localhost, 8000
 Run `./make_archive.sh` to zip the listed files into Archive/ using a timestamped name.
 
 ## Lighting cues import script
-
+Run the script using the apple interperator
 
 ## Change log
+### 2026-02-12
+Qlab:
+- build midi ques for animatronic
+
+
 ### 2026-02-11
 Updated *cue.csv file generator:
 - changed lighting_cues to eoslightingcues.csv
