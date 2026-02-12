@@ -6,5 +6,4 @@ Lines/
 SFX/
 .vscode/
 testing.scpt
-
-
+.venv/
