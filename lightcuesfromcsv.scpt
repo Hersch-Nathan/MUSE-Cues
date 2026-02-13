@@ -13,6 +13,7 @@ set csvLines to every paragraph of (read file csvFilePath)
 -- tell qlab
 tell application id "com.figure53.QLab.5" to tell front workspace
 	set currentGroup to missing value
+	set currentGroupNumber to missing value
 	set lineIndex to 1
 	repeat with currentLineRaw in csvLines
 		set lineIndex to lineIndex + 1
@@ -29,42 +30,51 @@ tell application id "com.figure53.QLab.5" to tell front workspace
 		set csvFields to every text item of currentLine
 		set AppleScript's text item delimiters to linefeed
 		
-		-- load the current values
-		set qlabQText to (item 1 of csvFields) as text
-		set qlabName to (item 2 of csvFields) as text
-		set eosQText to (item 3 of csvFields) as text
-		set eosName to (item 4 of csvFields) as text
+		-- load the current values (tolerate missing fields)
+		set qlabQText to ""
+		set qlabName to ""
+		set eosQText to ""
+		set eosName to ""
+		if (count of csvFields) >= 1 then set qlabQText to (item 1 of csvFields) as text
+		if (count of csvFields) >= 2 then set qlabName to (item 2 of csvFields) as text
+		if (count of csvFields) >= 3 then set eosQText to (item 3 of csvFields) as text
+		if (count of csvFields) >= 4 then set eosName to (item 4 of csvFields) as text
 		
-		-- Determine if this is a new group (has decimal point)
-		set hasDecimal to (qlabQText contains ".")
-		set digitBeforeDecimal to missing value
+		set isGroupRow to (eosQText is "")
 		
-		if hasDecimal then
-			set AppleScript's text item delimiters to "."
-			set digitBeforeDecimal to text item 1 of qlabQText
-			set AppleScript's text item delimiters to linefeed
+		if isGroupRow then
+			-- Explicit group row (no EOS data)
+			make type "group"
+			set currentGroup to (last item of (selected as list))
+			if qlabQText is not "" then set q number of currentGroup to qlabQText
+			if qlabName is not "" then
+				set q name of currentGroup to qlabName
+			else
+				set q name of currentGroup to "Group " & qlabQText
+			end if
+			-- Skip cue creation for group-only rows
+			set currentGroupNumber to qlabQText
+		else
+			set shouldNest to false
+			if currentGroup is not missing value and currentGroupNumber is not missing value then
+				if qlabQText starts with (currentGroupNumber & ".") then
+					set shouldNest to true
+				end if
+			end if
 			
-			-- Check if we need a new group
-			if currentGroup is missing value or digitBeforeDecimal is not equal to currentGroup then
-				make type "group"
-				set currentGroup to (last item of (selected as list))
-				set q number of currentGroup to digitBeforeDecimal
-				set q name of currentGroup to "Group " & digitBeforeDecimal
+			-- Create the Network cue
+			make type "Network"
+			set networkCue to last item of (selected as list)
+			set qlabQNumber to (qlabQText as number)
+			set q number of networkCue to qlabQNumber
+			set q name of networkCue to qlabName
+			set network patch number of networkCue to 2
+			set parameter values of networkCue to {"cue", "no", "fire", eosQText}
+			
+			-- Move into group when matched
+			if shouldNest then
+				move networkCue to end of currentGroup
 			end if
 		end if
-		
-		-- Create the Network cue
-		make type "Network"
-		set networkCue to last item of (selected as list)
-		set qlabQNumber to (qlabQText as number)
-		set q number of networkCue to qlabQNumber
-		set q name of networkCue to qlabName
-		set network patch number of networkCue to 2
-		set parameter values of networkCue to {"cue", "no", "fire", eosQText}
-		
-		-- Move to group if needed
-		--if hasDecimal then
-		--	set parent of networkCue to currentGroup
-		-- end if
 	end repeat
 end tell

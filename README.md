@@ -9,14 +9,14 @@ UDP, localhost, 8000
 Run `./make_archive.sh` to zip the listed files into Archive/ using a timestamped name.
 
 ## Lighting cues import script
-Run the script using the apple interperator
+Run the script using the apple interpolator
 
 ## Change log
 ### 2026-02-12
 Qlab:
 - build midi ques for animatronic
 - build main que stack and built 4 ques for sm
-
+- working on importing lighting into qlab
 
 ### 2026-02-11
 Updated *cue.csv file generator:
