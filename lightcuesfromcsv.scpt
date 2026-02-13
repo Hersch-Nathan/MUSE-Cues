@@ -3,8 +3,8 @@
 
 -- configs
 set scriptPath to (path to me)
-
-set csvFilePath to POSIX file "/Users/theatre/Desktop/MUSE-Cues/qlablightingcue.csv"
+-- set csvFilePath to POSIX file "/Users/theatre/Desktop/MUSE-Cues/qlablightingcue.csv"
+set csvFilePath to POSIX file "/Users/user/Library/CloudStorage/OneDrive-UniversityofKentucky/3. Theatre Stuff/Muse/Hersch/Ques/qlablightingcue.csv"
 set csvSeparator to ","
 
 -- read file
