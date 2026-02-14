@@ -46,7 +46,7 @@ tell application id "com.figure53.QLab.5" to tell front workspace
 			-- Explicit group row (no EOS data)
 			make type "group"
 			set currentGroup to (last item of (selected as list))
-			if qlabQText is not "" then set q number of currentGroup to qlabQText
+			if qlabQText is not "" then set q number of currentGroup to "L" & qlabQText
 			if qlabName is not "" then
 				set q name of currentGroup to qlabName
 			else
@@ -65,8 +65,7 @@ tell application id "com.figure53.QLab.5" to tell front workspace
 			-- Create the Network cue
 			make type "Network"
 			set networkCue to last item of (selected as list)
-			set qlabQNumber to (qlabQText as number)
-			set q number of networkCue to qlabQNumber
+			set q number of networkCue to "L" & qlabQText
 			set q name of networkCue to qlabName
 			set network patch number of networkCue to 2
 			set parameter values of networkCue to {"cue", "no", "fire", eosQText}

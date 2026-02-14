@@ -5,6 +5,33 @@ Cues for MUSE.
 Qlab/EOS
 UDP, localhost, 8000
 
+Animatronic Notes
+Animation | Midi Channel | Note | Velocity
+--- | --- | --- | ---
+K4 | 1 | 1 | 30
+D1 - M | 2 | 10 | 10
+D2.5 - M | 2 | 20 | 20
+D2 - M | 2 | 25 | 25
+D3 - M | 2 | 30 | 20
+D4 - M | 2 | 40 | 40
+D1 - L | 3 | 10 | 10
+D2 - L | 3 | 20 | 20
+D2.5 - L | 3 | 25 | 25
+D3 - L | 3 | 30 | 20
+D4 - L | 3 | 40 | 40
+A1 - M | 4 | 10 | 10
+A2 - M | 4 | 20 | 20
+A3 - M | 4 | 30 | 20
+A4 - M | 4 | 40 | 40
+A5 - M | 4 | 50 | 50
+A6 - M | 4 | 60 | 60
+A1 - L | 5 | 10 | 10
+A2 - L | 5 | 20 | 20
+A3 - L | 5 | 30 | 20
+A4 - L | 5 | 40 | 40
+A5 - L | 5 | 50 | 50
+A6 - L | 5 | 60 | 60
+
 ## Archive script
 Run `./make_archive.sh` to zip the listed files into Archive/ using a timestamped name.
 
@@ -12,6 +39,12 @@ Run `./make_archive.sh` to zip the listed files into Archive/ using a timestampe
 Run the script using the apple interpolator
 
 ## Change log
+### 2026-02-13
+Qlab:
+- lighting script imports correctly into qlab
+- main que stack outlined with all ques (lighting, sound, anamtronic)
+- built control stack to enable which configuration 
+
 ### 2026-02-12
 Qlab:
 - build midi ques for animatronic
