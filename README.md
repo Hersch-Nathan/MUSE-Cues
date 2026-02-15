@@ -39,6 +39,13 @@ Run `./make_archive.sh` to zip the listed files into Archive/ using a timestampe
 Run the script using the apple interpolator
 
 ## Change log
+### 2026-02-14
+QLab:
+-- build control cart for ease of use
+
+EOS: 
+-- changed number of fixtures from 6 to 8 
+
 ### 2026-02-13
 Qlab:
 - lighting script imports correctly into qlab
