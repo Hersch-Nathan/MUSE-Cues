@@ -32,6 +32,30 @@ A4 - L | 5 | 40 | 40
 A5 - L | 5 | 50 | 50
 A6 - L | 5 | 60 | 60
 
+## Arm Notes
+
+**Find USB ports:**
+```bash
+.venv/bin/lerobot-find-port
+```
+
+**Teleoperate both arms (leader + follower):**
+```bash
+.venv/bin/lerobot-teleoperate \
+  --teleop.type so101_leader \
+  --teleop.port /dev/tty.usbmodem5AE60586551 \
+  --robot.type so101_follower \
+  --robot.port /dev/tty.usbmodem5AE60541051
+```
+
+**Teleoperate single arm (keyboard control):**
+```bash
+.venv/bin/lerobot-teleoperate \
+  --teleop.type keyboard \
+  --robot.type so101_follower \
+  --robot.port /dev/cu.usbmodem5AE60541051
+```
+
 ## Archive script
 Run `./make_archive.sh` to zip the listed files into Archive/ using a timestamped name.
 
