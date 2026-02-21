@@ -65,6 +65,10 @@ Run the script using the apple interpolator
 ## Change log
 ### 2026-02-20
 EOS:
+-- all lighting ques built
+
+### 2026-02-20
+EOS:
 -- Focused lights 
 -- filled all pallets
 -- built cue 1 through 406 (general and single object)
