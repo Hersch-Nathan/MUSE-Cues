@@ -63,6 +63,12 @@ Run `./make_archive.sh` to zip the listed files into Archive/ using a timestampe
 Run the script using the apple interpolator
 
 ## Change log
+### 2026-02-20
+EOS:
+-- Focused lights 
+-- filled all pallets
+-- built cue 1 through 406 (general and single object)
+
 ### 2026-02-14
 QLab:
 -- build control cart for ease of use
