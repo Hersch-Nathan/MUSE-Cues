@@ -67,6 +67,9 @@ Run the script using the apple interpolator
 EOS:
 -- all lighting ques built
 
+Qlab:
+-- line placed in Qlab
+
 ### 2026-02-20
 EOS:
 -- Focused lights 
