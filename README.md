@@ -63,7 +63,12 @@ Run `./make_archive.sh` to zip the listed files into Archive/ using a timestampe
 Run the script using the apple interpolator
 
 ## Change log
-### 2026-02-20
+### 2026-02-21
+Qlab:
+-- object audio and speaker placement built
+TODO: fix all sound effects and build control for them
+
+### 2026-02-21
 EOS:
 -- all lighting ques built
 
